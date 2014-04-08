@@ -20,10 +20,15 @@ namespace SnakesOnAGame
         SpriteBatch spriteBatch;
 
         Texture2D snakeTexture;
+        Rectangle currentSquare;
 
-        List <Vector2> snake = new List <Vector2>();
-        Vector2 pellet = new Vector2(2, 2);
+        float timeRemaining = 0.0f;
+        const float TimePerSquare = 0.75f;
+
         Random rand = new Random();
+        List <Vector2> snake = new List <Vector2>();
+        Vector2 pellet = new Vector2(2, 2);//rand.Next(1, 10),rand.Next(1,10));
+        Vector2 velocity = new Vector2(0, -1);
 
 
         public Game1()
@@ -81,6 +86,28 @@ namespace SnakesOnAGame
 
             // TODO: Add your update logic here
 
+            KeyboardState kb = Keyboard.GetState();
+
+            if (kb.IsKeyDown(Keys.Up))
+            {
+                velocity = new Vector2(0, -1);
+            }
+
+            if (kb.IsKeyDown(Keys.Down))
+            {
+                velocity = new Vector2(0, 1);
+            }
+
+            if (kb.IsKeyDown(Keys.Left))
+            {
+                velocity = new Vector2(-1, 0);
+            }
+
+            if (kb.IsKeyDown(Keys.Right))
+            {
+                velocity = new Vector2(1, 0);
+            }
+
             base.Update(gameTime);
         }
 
@@ -94,8 +121,9 @@ namespace SnakesOnAGame
 
             for (int i = 0; i < snake.Count; i++)
             {
+                spriteBatch.Begin();
                 spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.PaleVioletRed);
-
+                spriteBatch.End();
             }
 
             if (snake[0] == pellet)
