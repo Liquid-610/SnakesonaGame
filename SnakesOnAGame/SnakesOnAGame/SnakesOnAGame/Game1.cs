@@ -19,6 +19,13 @@ namespace SnakesOnAGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D snakeTexture;
+
+        List <Vector2> snake = new List <Vector2>();
+        Vector2 pellet = new Vector2(2, 2);
+        Random rand = new Random();
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,6 +53,8 @@ namespace SnakesOnAGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            snake.Add(new Vector2(40, 24));
 
             // TODO: use this.Content to load your game content here
         }
@@ -82,6 +91,18 @@ namespace SnakesOnAGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            for (int i = 0; i < snake.Count; i++)
+            {
+                spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.PaleVioletRed);
+
+            }
+
+            if (snake[0] == pellet)
+            {
+                snake.Add(new Vector2(2,1));
+                pellet = new Vector2(rand.Next(1, 100), rand.Next(1, 100));
+            }
 
             // TODO: Add your drawing code here
 
