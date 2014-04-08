@@ -30,6 +30,8 @@ namespace SnakesOnAGame
         Vector2 pellet = new Vector2(2, 2);//rand.Next(1, 10),rand.Next(1,10));
         Vector2 velocity = new Vector2(0, -1);
 
+        Color[] colors = new Color[5] { Color.Transparent, Color.PowderBlue, 
+        Color.SteelBlue, Color.Tomato, Color.IndianRed };
 
         public Game1()
         {
@@ -60,6 +62,8 @@ namespace SnakesOnAGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             snake.Add(new Vector2(40, 24));
+
+            snakeTexture = Content.Load<Texture2D>(@"SQUARE");
 
             // TODO: use this.Content to load your game content here
         }
@@ -122,7 +126,8 @@ namespace SnakesOnAGame
             for (int i = 0; i < snake.Count; i++)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.PaleVioletRed);
+                spriteBatch.Draw(snakeTexture, snake[i] * 10, colors[i]);
+                
                 spriteBatch.End();
             }
 
