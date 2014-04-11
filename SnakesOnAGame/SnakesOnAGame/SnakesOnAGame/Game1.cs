@@ -24,7 +24,9 @@ namespace SnakesOnAGame
         Rectangle currentSquare;
 
         float snakemovetimer = 0f;
-         float snakemovetime = 50f;
+        float snakemovetime = 20f;
+
+         int playerScore = 0;
 
         Random rand = new Random();
         List <Vector2> snake = new List <Vector2>();
@@ -32,8 +34,8 @@ namespace SnakesOnAGame
         //Vector2 pellet = new Vector2(2, 2);//rand.Next(1, 10),rand.Next(1,10));
         Vector2 velocity = new Vector2(0, -1);
 
-        Color[] colors = new Color[5] { Color.Red, Color.PowderBlue, 
-        Color.SteelBlue, Color.Tomato, Color.IndianRed };
+        Color[] colors = new Color[] { Color.Red, Color.PowderBlue, 
+        Color.SteelBlue, Color.Tomato, Color.IndianRed, Color.DarkRed,Color.Wheat, Color.White,Color.Yellow,Color.Turquoise,Color.Green};
 
         public Game1()
         {
@@ -103,6 +105,13 @@ namespace SnakesOnAGame
 
             if (snakemovetimer > snakemovetime)
             {
+
+                for (int n = snake.Count - 1; n > 0; n--)
+                {
+                    snake[n] = snake[n - 1];
+                }
+
+
                 snake[0] += velocity;
                  snakemovetimer = 0f;
             }
@@ -140,11 +149,13 @@ namespace SnakesOnAGame
             {
                 snake.Add(new Vector2(2, 1));
                 Food = new Vector2(rand.Next(1, 40), (rand.Next(1, 40)));
-                   
+                playerScore++;
 
                 //Food.Add(new Vector2(rand.Next(1,100), rand.Next(1,100)));
             }
 
+
+            this.Window.Title = "Score : " + playerScore.ToString();
 
             base.Update(gameTime);
         }
@@ -161,7 +172,7 @@ namespace SnakesOnAGame
             spriteBatch.Begin();
             for (int i = 0; i < snake.Count; i++)
             {
-                spriteBatch.Draw(FoodTexture, Food * 10, colors[i]);
+                spriteBatch.Draw(FoodTexture, Food * 10, Color.White);
                 spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.DarkRed);
                 
                 
