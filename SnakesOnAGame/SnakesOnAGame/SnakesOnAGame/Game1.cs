@@ -23,14 +23,13 @@ namespace SnakesOnAGame
         Texture2D FoodTexture;
         Rectangle currentSquare;
 
-        float timeRemaining = 0.0f;
-        const float TimePerSquare = 0.75f;
+        float snakemovetimer = 0f;
+         float snakemovetime = 50f;
 
         Random rand = new Random();
         List <Vector2> snake = new List <Vector2>();
-        List<Vector2> Food = new List<Vector2>();
-
-        Vector2 pellet = new Vector2(2, 2);//rand.Next(1, 10),rand.Next(1,10));
+        Vector2 Food = new Vector2(1,2);
+        //Vector2 pellet = new Vector2(2, 2);//rand.Next(1, 10),rand.Next(1,10));
         Vector2 velocity = new Vector2(0, -1);
 
         Color[] colors = new Color[5] { Color.Red, Color.PowderBlue, 
@@ -64,7 +63,7 @@ namespace SnakesOnAGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Food.Add(new Vector2(45, 29));
+            Food = new Vector2(45, 29);
             snake.Add(new Vector2(40, 24));
            
 
@@ -99,6 +98,16 @@ namespace SnakesOnAGame
 
             // TODO: Add your update logic here
 
+
+            snakemovetimer += (float)gameTime.ElapsedGameTime.Milliseconds;
+
+            if (snakemovetimer > snakemovetime)
+            {
+                snake[0] += velocity;
+                 snakemovetimer = 0f;
+            }
+                
+
             KeyboardState kb = Keyboard.GetState();
 
             if (kb.IsKeyDown(Keys.Up))
@@ -122,29 +131,20 @@ namespace SnakesOnAGame
                 
             }
 
-            if (true)
-            {
-                timeRemaining = 0.05f;
-                snake[0] += velocity;
-            }
+            
 
-            if (timeRemaining == 0.0f)
-            {
-                currentSquare = new Rectangle(
-                rand.Next(0, this.Window.ClientBounds.Width - 25),
-                rand.Next(0, this.Window.ClientBounds.Height - 25),
-                25, 25);
-                timeRemaining = TimePerSquare;
-            }
+           
 
-            if (snake[0] == Food[0])
+
+            if (snake[0] == Food)
             {
                 snake.Add(new Vector2(2, 1));
-                Food[0] = new Vector2(1000, 1000);
-                pellet = new Vector2(1000, 1000);
+                Food = new Vector2(rand.Next(1, 40), (rand.Next(1, 40)));
+                   
 
                 //Food.Add(new Vector2(rand.Next(1,100), rand.Next(1,100)));
             }
+
 
             base.Update(gameTime);
         }
@@ -161,8 +161,8 @@ namespace SnakesOnAGame
             spriteBatch.Begin();
             for (int i = 0; i < snake.Count; i++)
             {
-                spriteBatch.Draw(FoodTexture, Food[0], colors[i]);
-                spriteBatch.Draw(snakeTexture, snake[i] * 10, colors[i]);
+                spriteBatch.Draw(FoodTexture, Food * 10, colors[i]);
+                spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.DarkRed);
                 
                 
                
