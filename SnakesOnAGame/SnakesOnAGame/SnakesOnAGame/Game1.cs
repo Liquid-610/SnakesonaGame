@@ -109,6 +109,8 @@ namespace SnakesOnAGame
                 for (int n = snake.Count - 1; n > 0; n--)
                 {
                     snake[n] = snake[n - 1];
+
+                  
                 }
 
 
@@ -119,29 +121,35 @@ namespace SnakesOnAGame
 
             KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Up))
+            if (kb.IsKeyDown(Keys.Up) && velocity.Y != 1)
             {
                 velocity = new Vector2(0, -1);
             }
 
-            if (kb.IsKeyDown(Keys.Down))
+            if (kb.IsKeyDown(Keys.Down) && velocity.Y != -1)
             {
                 velocity = new Vector2(0, 1);
             }
 
-            if (kb.IsKeyDown(Keys.Left))
+            if (kb.IsKeyDown(Keys.Left) && velocity.X != 1)
             {
                 velocity = new Vector2(-1, 0);
             }
 
-            if (kb.IsKeyDown(Keys.Right))
+            if (kb.IsKeyDown(Keys.Right) && velocity.X != -1)
             {
                 velocity = new Vector2(1, 0);
                 
             }
 
-            
 
+            for (int g = snake.Count -1; g > 0; g++)
+            {
+                if (snake[0] == snake[g])
+                {
+                    EndRun();
+                }
+            }
            
 
 
@@ -150,10 +158,12 @@ namespace SnakesOnAGame
                 snake.Add(new Vector2(2, 1));
                 Food = new Vector2(rand.Next(1, 40), (rand.Next(1, 40)));
                 playerScore++;
+                EndDraw();
 
                 //Food.Add(new Vector2(rand.Next(1,100), rand.Next(1,100)));
             }
 
+           
 
             this.Window.Title = "Score : " + playerScore.ToString();
 
