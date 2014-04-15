@@ -24,7 +24,7 @@ namespace SnakesOnAGame
         Rectangle currentSquare;
 
         float snakemovetimer = 0f;
-        float snakemovetime = 20f;
+        float snakemovetime = 40f;
 
          int playerScore = 0;
 
@@ -36,6 +36,8 @@ namespace SnakesOnAGame
 
         Color[] colors = new Color[] { Color.Red, Color.PowderBlue, 
         Color.SteelBlue, Color.Tomato, Color.IndianRed, Color.DarkRed,Color.Wheat, Color.White,Color.Yellow,Color.Turquoise,Color.Green};
+
+        Camera camera;
 
         public Game1()
         {
@@ -67,8 +69,9 @@ namespace SnakesOnAGame
 
             Food = new Vector2(45, 29);
             snake.Add(new Vector2(40, 24));
-           
 
+            camera = new Camera(new Viewport(0, 0, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height));
+            camera.Origin = new Vector2(camera.ViewPort.Width / 2.0f, camera.ViewPort.Height);
 
             snakeTexture = Content.Load<Texture2D>(@"SQUARE");
 
@@ -100,6 +103,7 @@ namespace SnakesOnAGame
 
             // TODO: Add your update logic here
 
+            camera.Update(gameTime);
 
             snakemovetimer += (float)gameTime.ElapsedGameTime.Milliseconds;
 
@@ -143,12 +147,16 @@ namespace SnakesOnAGame
             }
 
 
-            for (int g = snake.Count -1; g > 0; g++)
+            for (int g = snake.Count - 1; g > 0; g--)
             {
                 if (snake[0] == snake[g])
                 {
-                    EndRun();
+                    snake.Clear();
+                    snake.Add(new Vector2(40, 24));
+
+                    break;
                 }
+
             }
            
 
@@ -156,9 +164,10 @@ namespace SnakesOnAGame
             if (snake[0] == Food)
             {
                 snake.Add(new Vector2(2, 1));
-                Food = new Vector2(rand.Next(1, 40), (rand.Next(1, 40)));
+                Food = new Vector2(rand.Next(1, 40), (rand.Next(1, 30)));
                 playerScore++;
-                EndDraw();
+
+                camera.Shake(5, 0.25f);
 
                 //Food.Add(new Vector2(rand.Next(1,100), rand.Next(1,100)));
             }
@@ -179,11 +188,12 @@ namespace SnakesOnAGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.GetViewMatrix(Vector2.One));
+
             for (int i = 0; i < snake.Count; i++)
             {
-                spriteBatch.Draw(FoodTexture, Food * 10, Color.White);
-                spriteBatch.Draw(snakeTexture, snake[i] * 10, Color.DarkRed);
+                spriteBatch.Draw(FoodTexture, Food * 16, Color.White);
+                spriteBatch.Draw(snakeTexture, snake[i] * 16, Color.DarkRed);
                 
                 
                
